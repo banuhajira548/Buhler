@@ -7,6 +7,7 @@ import {
   EnvironmentOutlined,
   DollarOutlined,
 } from '@ant-design/icons';
+import logo from '../assets/cmtilogo.png'; // Adjust the path to your logo
 
 const { Sider } = Layout;
 
@@ -52,29 +53,54 @@ const Sidebar = () => {
   return (
     <Sider
       style={{
-        overflow: 'auto',
         height: '100vh',
         position: 'fixed',
         left: 0,
         top: 64,
         bottom: 0,
         background: '#fff',
+        display: 'flex',
+        flexDirection: 'column', // Ensures the content stacks vertically
+        justifyContent: 'space-between', // Spaces the content properly
       }}
       breakpoint="lg"
       collapsedWidth="0"
     >
-      <Menu
-        mode="inline"
-        selectedKeys={[selectedKey]}
-        style={{ height: '100%', borderRight: 0 }}
-        onClick={handleMenuClick}
-      >
-        <Menu.Item key="1" icon={<DashboardOutlined />}>Dashboard</Menu.Item>
-        <Menu.Item key="2" icon={<CarOutlined />}>Orders</Menu.Item>
-        <Menu.Item key="3" icon={<CarOutlined />}>Vehicles</Menu.Item>
-        <Menu.Item key="4" icon={<EnvironmentOutlined />}>Routes</Menu.Item>
-        <Menu.Item key="5" icon={<DollarOutlined />}>Billing</Menu.Item>
-      </Menu>
+      <div>
+        {/* Logo at the top of the sidebar */}
+        <div style={{ padding: '10px', textAlign: 'center' }}>
+          <img 
+            src={logo} 
+            alt="Logo" 
+            style={{ width: '100%', maxHeight: '64px', objectFit: 'contain' }} 
+          />
+        </div>
+
+        <Menu
+          mode="inline"
+          selectedKeys={[selectedKey]}
+          style={{ height: '100%', borderRight: 0 }}
+          onClick={handleMenuClick}
+        >
+          <Menu.Item key="1" icon={<DashboardOutlined />}>Dashboard</Menu.Item>
+          <Menu.Item key="2" icon={<CarOutlined />}>Orders</Menu.Item>
+          <Menu.Item key="3" icon={<CarOutlined />}>Vehicles</Menu.Item>
+          <Menu.Item key="4" icon={<EnvironmentOutlined />}>Routes</Menu.Item>
+          <Menu.Item key="5" icon={<DollarOutlined />}>Billing</Menu.Item>
+        </Menu>
+      </div>
+
+      {/* CMTI link at the bottom */}
+      <div style={{ padding: '10px', textAlign: 'center' }}>
+        <a 
+          href="http://www.cmti.res.in" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          style={{ textDecoration: 'none', color: '#000' }}
+        >
+          www.cmti.res.in
+        </a>
+      </div>
     </Sider>
   );
 };

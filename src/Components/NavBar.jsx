@@ -43,7 +43,7 @@ const Navbar = () => {
             fontFamily: '"Montserrat", sans-serif',
           }}
         >
-          Buhler Logistics
+          BUHLER
         </Title>
       </div>
 
