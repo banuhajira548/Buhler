@@ -173,7 +173,7 @@ const OrderManagement = () => {
         </Col>
       </Row>
 
-      <Row gutter={16} style={{ marginTop: 24, marginBottom: 16 }}>
+      {/* <Row gutter={16} style={{ marginTop: 24, marginBottom: 16 }}>
         <Col span={24}>
           <Space size="large">
             <DatePicker.RangePicker style={{ width: 300 }} placeholder={['Start Date', 'End Date']} />
@@ -195,9 +195,9 @@ const OrderManagement = () => {
             </Button>
           </Space>
         </Col>
-      </Row>
+      </Row> */}
 
-      <Row gutter={16}>
+      {/* <Row gutter={16}>
         <Col span={24}>
           <Card title="Order Details" style={{ borderRadius: '15px' }}>
             {orderDetailsData.length === 0 ? (
@@ -207,7 +207,7 @@ const OrderManagement = () => {
             )}
           </Card>
         </Col>
-      </Row>
+      </Row> */}
 
       <Row gutter={16}>
         <Col span={24}>

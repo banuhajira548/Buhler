@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
@@ -16,8 +14,8 @@ import {
   Avatar, 
   Statistic, 
   Typography,
-  
-
+  Progress,
+  Text
 } from 'antd';
 import { 
   CarOutlined, 
@@ -64,12 +62,18 @@ const vehicleIcon = new L.Icon({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Sample vehicle data with random nearby locations
-const recentVehiclesData = [
+// Update the sample data structure
+const recentOrdersData = [
   {
     key: 1,
+    orderId: 'ORD001',
+    stages: [
+      { time: '9:00 AM', status: 'Checking' },
+      { time: '10:45 AM', status: 'In Transit' },
+      { time: '12:00 PM', status: 'Delivered' }
+    ],
+    currentStage: 2,
     vehicleId: 'V001',
-    type: 'Tata Ace',
     driver: {
       name: 'CMTI',
       image: driver1Image,
@@ -96,8 +100,14 @@ const recentVehiclesData = [
   },
   {
     key: 2,
+    orderId: 'ORD002',
+    stages: [
+      { time: '9:00 AM', status: 'Checking' },
+      { time: '10:45 AM', status: 'In Transit' },
+      { time: '12:00 PM', status: 'Delivered' }
+    ],
+    currentStage: 2,
     vehicleId: 'V002',
-    type: '307',
     driver: {
       name: 'CMTI',
       image: driver2Image,
@@ -124,8 +134,14 @@ const recentVehiclesData = [
   },
   {
     key: 3,
+    orderId: 'ORD003',
+    stages: [
+      { time: '9:00 AM', status: 'Checking' },
+      { time: '10:45 AM', status: 'In Transit' },
+      { time: '12:00 PM', status: 'Delivered' }
+    ],
+    currentStage: 2,
     vehicleId: 'V003',
-    type: '17 Canter',
     driver: {
       name: 'CMTI',
       image: driver3Image,
@@ -152,8 +168,14 @@ const recentVehiclesData = [
   },
   {
     key: 4,
+    orderId: 'ORD004',
+    stages: [
+      { time: '9:00 AM', status: 'Checking' },
+      { time: '10:45 AM', status: 'In Transit' },
+      { time: '12:00 PM', status: 'Delivered' }
+    ],
+    currentStage: 2,
     vehicleId: 'V004',
-    type: 'Tata Ace',
     driver: {
       name: 'CMTI',
       image: driver1Image,
@@ -184,7 +206,7 @@ const VehicleManagement = () => {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [vehiclePosition, setVehiclePosition] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [vehicles, setVehicles] = useState(recentVehiclesData);
+  const [orders, setOrders] = useState(recentOrdersData);
   const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
@@ -207,9 +229,9 @@ const VehicleManagement = () => {
     setSearchText(value);
   };
 
-  const filteredVehicles = vehicles.filter(vehicle =>
-    vehicle.vehicleId.toLowerCase().includes(searchText.toLowerCase()) ||
-    vehicle.driver.name.toLowerCase().includes(searchText.toLowerCase())
+  const filteredOrders = orders.filter(order =>
+    order.orderId.toLowerCase().includes(searchText.toLowerCase()) ||
+    order.driver.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
   const getStatusColor = (status) => {
@@ -345,71 +367,53 @@ const VehicleManagement = () => {
       <Layout>
         <Content style={{ padding: '24px', margin: '0', background: '#f0f2f5' }}>
           <Row gutter={[16, 16]}>
-            {/* Vehicle Fleet Section */}
+            {/* Tracking delivery Section */}
             <Col span={12}>
               <Card 
                 title={
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <CarOutlined style={{ fontSize: '20px', marginRight: '8px' }} />
-                    Vehicle Fleet
+                    TRACKING DELIVERY
                   </div>
                 }
                 bordered={false}
                 className="vehicle-fleet-card"
               >
                 <Search
-                  placeholder="Search by Vehicle ID or Driver Name"
+                  placeholder="Search by ORDER ID"
                   onSearch={handleSearch}
                   style={{ marginBottom: 16 }}
                   enterButton
                 />
                 <div style={{ height: '520px', overflowY: 'auto' }}>
-                  {filteredVehicles.map((vehicle) => (
+                  {filteredOrders.map((order) => (
                     <Card
-                      key={vehicle.key}
-                      className={`vehicle-card ${selectedVehicle?.key === vehicle.key ? 'selected' : ''}`}
+                      key={order.key}
+                      className={`order-card ${selectedVehicle?.key === order.key ? 'selected' : ''}`}
                       style={{
                         marginBottom: 16,
                         cursor: 'pointer',
-                        border: selectedVehicle?.key === vehicle.key ? '2px solid #1890ff' : '1px solid #d9d9d9'
+                        border: selectedVehicle?.key === order.key ? '2px solid #1890ff' : '1px solid #d9d9d9'
                       }}
-                      onClick={() => handleVehicleSelect(vehicle)}
+                      onClick={() => handleVehicleSelect(order)}
                     >
-                      <Row gutter={[16, 8]} align="middle">
-                        <Col span={24}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Title level={4} style={{ margin: 0 }}>
-                              {vehicle.vehicleId}
-                            </Title>
-                            <Tag color={getStatusColor(vehicle.status)}>{vehicle.status}</Tag>
-                          </div>
-                        </Col>
-                        <Col span={12}>
-                          <img
-                            src={vehicle.type === 'Tata Ace' ? tataAceImage : 
-                                 vehicle.type === '307' ? truckImage : canterImage}
-                            alt={vehicle.type}
-                            style={{ width: '100%', maxWidth: '150px' }}
-                          />
-                        </Col>
-                        <Col span={12}>
-                          <div style={{ marginBottom: '8px' }}>
-                            <strong>Driver:</strong> {vehicle.driver.name}
-                          </div>
-                          <div style={{ marginBottom: '8px' }}>
-                            <strong>Location:</strong> {vehicle.currentLocation}
-                          </div>
-                          <div style={{ marginBottom: '8px' }}>
-                            <strong>Destination:</strong> {vehicle.destination}
-                          </div>
-                          <div style={{ marginBottom: '8px' }}>
-                            <strong>Last Updated:</strong> {vehicle.lastUpdated}
-                          </div>
-                          <div>
-                          <strong>Speed:</strong> {vehicle.speed}
-                          </div>
-                        </Col>
-                      </Row>
+                      <Title level={4}>Order ID: {order.orderId}</Title>
+                      {order.stages.map((stage, index) => (
+                        <div key={index} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                          <Text>
+                            <ClockCircleOutlined style={{ marginRight: 8 }} />
+                            {stage.time}
+                          </Text>
+                          <Text>{stage.status}</Text>
+                        </div>
+                      ))}
+                      <Progress 
+                        percent={(order.currentStage / order.stages.length) * 100} 
+                        status={order.currentStage === order.stages.length ? 'success' : 'active'} 
+                        showInfo={false} 
+                      />
+                      <Text type="secondary">
+                        {order.stages[order.currentStage - 1]?.status || 'Pending'}
+                      </Text>
                     </Card>
                   ))}
                 </div>
@@ -421,8 +425,7 @@ const VehicleManagement = () => {
               <Card 
                 title={
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <EnvironmentOutlined style={{ fontSize: '20px', marginRight: '8px' }} />
-                    Vehicle Tracking
+                    Order ID #1458547
                   </div>
                 }
                 bordered={false}
