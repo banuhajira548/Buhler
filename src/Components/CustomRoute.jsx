@@ -1,7 +1,5 @@
 
-
 import React, { useState, useEffect } from 'react';
-
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import { 
   Layout, 
@@ -13,11 +11,8 @@ import {
   message, 
   Spin, 
   Input, 
-  Avatar, 
   Statistic, 
   Typography,
-  
-
 } from 'antd';
 import { 
   CarOutlined, 
@@ -33,7 +28,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
 // Import vehicle images
-import tataAceImage from '../assets/tataace.png'
+import tataAceImage from '../assets/tataace.png';
 import truckImage from '../assets/truck.png';
 import canterImage from '../assets/17canter.png';
 
@@ -64,22 +59,99 @@ const vehicleIcon = new L.Icon({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Sample vehicle data with random nearby locations
+// Truck Load Visualization Component
+const TruckLoadVisualization = ({ loadPercentage = 0 }) => {
+  // Ensure loadPercentage is between 0 and 100
+  const normalizedPercentage = Math.min(100, Math.max(0, loadPercentage));
+  
+  return (
+   <div className="relative w-full h-48">
+  <svg 
+    viewBox="0 0 140 100" // Adjusted viewBox for a larger scale
+    className="w-full h-full"
+    style={{ background: '#fff' }}
+  >
+    {/* Truck Body */}
+    <g transform="translate(20, 20)"> {/* Centered the truck */}
+      {/* Main cargo container - outline */}
+      <rect
+        x="10"
+        y="10"
+        width="100"  // Increased width for a bigger truck
+        height="35"  // Increased height for a bigger truck
+        fill="#f5f5f5"
+        stroke="#d9d9d9"
+        strokeWidth="2"
+      />
+      
+      {/* Cabin */}
+      <path
+        d="M0 45 L25 45 L25 25 L15 20 L0 25 Z" // Adjusted dimensions for a larger cabin
+        fill="#f5f5f5"
+        stroke="#d9d9d9"
+        strokeWidth="2"
+      />
+      
+      {/* Load visualization */}
+      <rect
+        x="11"
+        y="11"
+        width={108 * (normalizedPercentage / 100)} // Adjusted width to fit cargo
+        height="33" // Increased height to fit cargo
+        fill="#1890ff"
+        opacity="0.8"
+      />
+      
+      {/* Wheels */}
+      <circle cx="15" cy="50" r="6" fill="#d9d9d9" />  {/* Adjusted wheel position */}
+      <circle cx="100" cy="50" r="6" fill="#d9d9d9" />  {/* Adjusted wheel position */}
+      
+      {/* Percentage text */}
+      <text
+        x="60"
+        y="25" // Adjusted Y position for centering
+        textAnchor="middle"
+        fill={normalizedPercentage > 50 ? '#fff' : '#000'}
+        style={{ 
+          fontSize: '20px', // Slightly increased font size
+          fontWeight: 'bold',
+          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial'
+        }}
+      >
+        {normalizedPercentage}%
+      </text>
+      
+      {/* Load status text */}
+      <text
+        x="60"
+        y="40" // Adjusted Y position for centering
+        textAnchor="middle"
+        fill="#8c8c8c"
+        style={{ 
+          fontSize: '12px', // Increased font size
+          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial'
+        }}
+      >
+        {/* Add any text you want here */}
+      </text>
+    </g>
+  </svg>
+</div>
+  );
+};
+// Sample vehicle data with random nearby locations and load percentages
 const recentVehiclesData = [
   {
     key: 1,
     vehicleId: 'V001',
     type: 'Tata Ace',
+    loadPercentage: 75,
     driver: {
       name: 'CMTI',
       image: driver1Image,
-      phone: '+91 9876543210',
-      email: 'centralmanuf.@cmti.res.in',
       license: 'DL-123456789',
       experience: '5 years',
       rating: '4.8/5',
-      address: '123 Main Street, Bangalore',
-      emergencyContact: '+91 9876543211',
       joinedDate: '15 Jan 2020',
       totalTrips: 1250,
       performanceScore: 95,
@@ -98,16 +170,13 @@ const recentVehiclesData = [
     key: 2,
     vehicleId: 'V002',
     type: '307',
+    loadPercentage: 60,
     driver: {
-      name: 'CMTI',
+      name: 'Rahul',
       image: driver2Image,
-      phone: '+91 9876543220',
-      email: 'centralmanu.@cmti.res.in',
       license: 'DL-987654321',
       experience: '3 years',
       rating: '4.5/5',
-      address: '456 Park Avenue, Bangalore',
-      emergencyContact: '+91 9876543222',
       joinedDate: '20 Mar 2021',
       totalTrips: 850,
       performanceScore: 88,
@@ -125,60 +194,82 @@ const recentVehiclesData = [
   {
     key: 3,
     vehicleId: 'V003',
-    type: '17 Canter',
+    type: 'Canter',
+    loadPercentage: 40,
     driver: {
-      name: 'CMTI',
+      name: 'Suresh',
       image: driver3Image,
-      phone: '+91 9876543230',
-      email: 'centralmanu.@cmti.res.in',
-      license: 'DL-456789123',
-      experience: '7 years',
-      rating: '4.9/5',
-      address: '789 Lake View, Bangalore',
-      emergencyContact: '+91 9876543233',
-      joinedDate: '05 Jun 2019',
-      totalTrips: 1580,
-      performanceScore: 97,
+      license: 'DL-111222333',
+      experience: '4 years',
+      rating: '4.7/5',
+      joinedDate: '10 Feb 2021',
+      totalTrips: 900,
+      performanceScore: 92,
       status: 'Active'
     },
-    status: 'Maintenance',
-    currentLocation: 'Jayanagar',
-    destination: 'JP Nagar',
-    coordinates: [12.9346, 77.5888],
-    destinationCoordinates: [12.9215, 77.5965],
-    lastUpdated: '2 mins ago',
-    fuelLevel: '80%',
-    speed: '30 km/h'
+    status: 'In Transit',
+    currentLocation: 'Koramangala',
+    destination: 'HSR Layout',
+    coordinates: [12.9348, 77.6410],
+    destinationCoordinates: [12.9236, 77.6174],
+    lastUpdated: '15 mins ago',
+    fuelLevel: '60%',
+    speed: '50 km/h'
   },
   {
     key: 4,
     vehicleId: 'V004',
     type: 'Tata Ace',
+    loadPercentage: 85,
     driver: {
-      name: 'CMTI',
+      name: 'Anil',
       image: driver1Image,
-      phone: '+91 9876543240',
-      email: 'centralmanu.@cmti.res.in',
-      license: 'DL-789123456',
-      experience: '4 years',
-      rating: '4.6/5',
-      address: '321 Valley Road, Bangalore',
-      emergencyContact: '+91 9876543244',
-      joinedDate: '10 Apr 2020',
-      totalTrips: 980,
-      performanceScore: 92,
+      license: 'DL-987123654',
+      experience: '6 years',
+      rating: '4.9/5',
+      joinedDate: '25 Apr 2019',
+      totalTrips: 1400,
+      performanceScore: 98,
       status: 'Active'
     },
-    status: 'In Transit',
-    currentLocation: 'HSR Layout',
-    destination: 'Electronic City',
-    coordinates: [12.9141, 77.6466],
-    destinationCoordinates: [12.8399, 77.6770],
-    lastUpdated: '15 mins ago',
-    fuelLevel: '65%',
+    status: 'Completed',
+    currentLocation: 'Whitefield',
+    destination: 'KR Puram',
+    coordinates: [12.9702, 77.7500],
+    destinationCoordinates: [12.9705, 77.7254],
+    lastUpdated: '2 mins ago',
+    fuelLevel: '30%',
     speed: '55 km/h'
+  },
+  {
+    key: 5,
+    vehicleId: 'V005',
+    type: '307',
+    loadPercentage: 70,
+    driver: {
+      name: 'Vikram',
+      image: driver2Image,
+      license: 'DL-654321987',
+      experience: '2 years',
+      rating: '4.6/5',
+      joinedDate: '30 May 2022',
+      totalTrips: 500,
+      performanceScore: 85,
+      status: 'Inactive'
+    },
+    status: 'Scheduled',
+    currentLocation: 'Indiranagar',
+    destination: 'Jayanagar',
+    coordinates: [12.9347, 77.6101],
+    destinationCoordinates: [12.9318, 77.5900],
+    lastUpdated: '30 mins ago',
+    fuelLevel: '20%',
+    speed: '30 km/h'
   }
 ];
+
+
+
 
 const VehicleManagement = () => {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
@@ -221,131 +312,100 @@ const VehicleManagement = () => {
     }
   };
 
-  const DriverDetailsCard = ({ driver }) => {
+  const DriverDetailsCard = ({ driver, loadPercentage }) => {
     if (!driver) return null;
 
     return (
-      <Card 
-        title={
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <UserOutlined style={{ fontSize: '20px', marginRight: '8px' }} />
-            <span>Driver Details</span>
-          </div>
-        }
-        className="driver-details-card"
-      >
-        <Row gutter={[24, 24]}>
-          {/* Driver Profile Section */}
-          <Col span={8}>
-            <Card bordered={false} className="driver-profile-card">
-              <div className="driver-avatar-container">
-                <img
-                  src={driver.image}
-                  alt={driver.name}
-                  style={{
-                    width: '200px',
-                    height: '200px',
-                    borderRadius: '50%',
-                    border: '4px solid #1890ff',
-                    objectFit: 'cover',
-                    marginBottom: '16px'
-                  }}
-                />
-              </div>
-              <Title level={3} style={{ margin: '16px 0 8px' }}>{driver.name}</Title>
-              <div style={{ marginBottom: '16px' }}>
-                <Tag color="blue">{driver.rating} Rating</Tag>
-                <Tag color="green">{driver.experience} Experience</Tag>
-              </div>
-              <Button type="primary" icon={<PhoneOutlined />} block style={{ marginBottom: '8px' }}>
-                Call Driver
-              </Button>
-              <Button icon={<MailOutlined />} block>
-                Send Message
-              </Button>
-            </Card>
-          </Col>
+      <div style={{ float: 'right', width: '780px', marginRight: '1px' }}>
+    <Card
+  title={
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <UserOutlined style={{ fontSize: '16px', marginRight: '8px' }} />
+        <span className="driver-details-title">Driver Details</span>
+      </div>
+      <div style={{ display: 'flex', gap: '8px' }}>
+        <Button type="primary" icon={<PhoneOutlined />} className="driver-details-button" style={{ width: '130px' }}>
+          Call Driver
+        </Button>
+        <Button icon={<MailOutlined />} className="driver-details-button" style={{ width: '130px' }}>
+          Send Message
+        </Button>
+      </div>
+    </div>
+  }
+  className="driver-details-card"
+>
+    
 
-          {/* Driver Information Section */}
-          <Col span={16}>
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <Card title="Contact Information" bordered={false}>
-                  <p><PhoneOutlined /> {driver.phone}</p>
-                  <p><MailOutlined /> {driver.email}</p>
-                  <p><EnvironmentOutlined /> {driver.address}</p>
-                  <p><strong>Emergency Contact:</strong> {driver.emergencyContact}</p>
-                </Card>
-              </Col>
+    <Row gutter={[14, 14]}>
+  <Col span={8}>
+
+    <Card bordered={false} className="driver-profile-card" style={{ padding: '8px', height: 'auto' }}>
+  <div className="driver-avatar-container">
+    <img
+      src={driver.image}
+      alt={driver.name}
+      style={{
+        width: '120px', // Reduced width
+        height: '150px', // Reduced height
+        borderRadius: '20%',
+        border: '4px solid #1890ff',
+        objectFit: 'cover',
+        marginBottom: '2px' // Reduced margin
+      }}
+    />
+  </div>
+  <Title level={4} style={{ margin: '8px 0 4px' }}>{driver.name}</Title> {/* Reduced margin */}
+ 
+</Card>
+  </Col>
+
+  <Col span={16}>
+  <Row gutter={[16, 16]}>
+    
+
+  <Col span={18} className="flex flex-col items-center"> {/* Centering the contents */}
+  <TruckLoadVisualization loadPercentage={loadPercentage} />
+
+ {/* Additional Driver Information */}
+{/* <div className="flex justify-center items-center space-x-8 mt-4"> 
+  <div className="flex items-center">
+    <strong className="mr-1">Total Trips:</strong>
+    <span>{driver.totalTrips}</span> 
+  </div>
+  
+  <div className="flex items-center">
+    <strong className="mr-1">Rating:</strong>
+    <span>{driver.rating}</span> 
+  </div>
+  
+  <div className="flex items-center">
+    <strong className="mr-1">Order Status:</strong>
+    <span>{driver.orderStatus}</span> 
+  </div>
+</div> */}
+</Col>
+
+  </Row>
+
+  
+</Col>
+</Row>
 
 
-              <Col span={12}>
-                <Card title="Professional Information" bordered={false}>
-                  <p>
-                    <IdcardOutlined style={{ marginRight: '8px' }} />
-                    <strong>License:</strong> {driver.license}
-                  </p>
-                  <p>
-                    <ClockCircleOutlined style={{ marginRight: '8px' }} />
-                    <strong>Joined:</strong> {driver.joinedDate}
-                  </p>
-                  <p>
-                    <CarOutlined style={{ marginRight: '8px' }} />
-                    <strong>Total Trips:</strong> {driver.totalTrips}
-                  </p>
-                  <p>
-                    <DashboardOutlined style={{ marginRight: '8px' }} />
-                    <strong>Performance:</strong> {driver.performanceScore}%
-                  </p>
-                </Card>
-              </Col>
-
-
-              <Col span={24}>
-                <Card title="Performance Metrics" bordered={false}>
-                  <Row gutter={16}>
-                    <Col span={6}>
-                      <Statistic title="Total Trips" value={driver.totalTrips} prefix={<CarOutlined />} />
-                    </Col>
-                    <Col span={6}>
-                      <Statistic 
-                        title="Rating" 
-                        value={parseFloat(driver.rating)} 
-                        suffix="/5" 
-                        precision={1} 
-                      />
-                    </Col>
-                    <Col span={6}>
-                      <Statistic 
-                        title="Performance" 
-                        value={driver.performanceScore} 
-                        suffix="%" 
-                        valueStyle={{ color: driver.performanceScore >= 90 ? '#3f8600' : '#cf1322' }}
-                      />
-                    </Col>
-                    <Col span={6}>
-                      <Statistic 
-                        title="Experience" 
-                        value={parseInt(driver.experience)} 
-                        suffix=" years" 
-                      />
-                    </Col>
-                  </Row>
-                </Card>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Card>
+  
+  </Card>
+</div>
     );
   };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Layout>
+    <Layout>
+     
         <Content style={{ padding: '24px', margin: '0', background: '#f0f2f5' }}>
           <Row gutter={[16, 16]}>
-            {/* Vehicle Fleet Section */}
+            {/* Left Column - Vehicle Fleet */}
             <Col span={12}>
               <Card 
                 title={
@@ -353,131 +413,136 @@ const VehicleManagement = () => {
                     <CarOutlined style={{ fontSize: '20px', marginRight: '8px' }} />
                     Vehicle Fleet
                   </div>
-                }
-                bordered={false}
-                className="vehicle-fleet-card"
-              >
-                <Search
+               }
+               bordered={false}
+               className="vehicle-fleet-card"
+               style={{ height: '100%', maxHeight: '80vh', overflow: 'hidden' }}
+             >
+              <Search
                   placeholder="Search by Vehicle ID or Driver Name"
                   onSearch={handleSearch}
                   style={{ marginBottom: 16 }}
                   enterButton
                 />
-                <div style={{ height: '520px', overflowY: 'auto' }}>
-                  {filteredVehicles.map((vehicle) => (
-                    <Card
-                      key={vehicle.key}
-                      className={`vehicle-card ${selectedVehicle?.key === vehicle.key ? 'selected' : ''}`}
-                      style={{
-                        marginBottom: 16,
-                        cursor: 'pointer',
-                        border: selectedVehicle?.key === vehicle.key ? '2px solid #1890ff' : '1px solid #d9d9d9'
-                      }}
-                      onClick={() => handleVehicleSelect(vehicle)}
-                    >
-                      <Row gutter={[16, 8]} align="middle">
-                        <Col span={24}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Title level={4} style={{ margin: 0 }}>
-                              {vehicle.vehicleId}
-                            </Title>
-                            <Tag color={getStatusColor(vehicle.status)}>{vehicle.status}</Tag>
-                          </div>
-                        </Col>
-                        <Col span={12}>
-                          <img
-                            src={vehicle.type === 'Tata Ace' ? tataAceImage : 
-                                 vehicle.type === '307' ? truckImage : canterImage}
-                            alt={vehicle.type}
-                            style={{ width: '100%', maxWidth: '150px' }}
-                          />
-                        </Col>
-                        <Col span={12}>
-                          <div style={{ marginBottom: '8px' }}>
-                            <strong>Driver:</strong> {vehicle.driver.name}
-                          </div>
-                          <div style={{ marginBottom: '8px' }}>
-                            <strong>Location:</strong> {vehicle.currentLocation}
-                          </div>
-                          <div style={{ marginBottom: '8px' }}>
-                            <strong>Destination:</strong> {vehicle.destination}
-                          </div>
-                          <div style={{ marginBottom: '8px' }}>
-                            <strong>Last Updated:</strong> {vehicle.lastUpdated}
-                          </div>
-                          <div>
-                          <strong>Speed:</strong> {vehicle.speed}
-                          </div>
-                        </Col>
-                      </Row>
-                    </Card>
-                  ))}
-                </div>
-              </Card>
+    <div style={{ height: 'calc(80vh - 100px)', overflowY: 'auto' }}> {/* Adjusted to fit within the card */}
+      {filteredVehicles.map((vehicle) => (
+        <Card
+          key={vehicle.key}
+          className={`vehicle-card ${selectedVehicle?.key === vehicle.key ? 'selected' : ''}`}
+          style={{
+            marginBottom: 16,
+            cursor: 'pointer',
+            border: selectedVehicle?.key === vehicle.key ? '2px solid #1890ff' : '1px solid #d9d9d9'
+          }}
+          onClick={() => handleVehicleSelect(vehicle)}
+        >
+          <Row gutter={[16, 8]} align="middle">
+            <Col span={24}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Title level={4} style={{ margin: 0 }}>
+                  {vehicle.vehicleId}
+                </Title>
+                <Tag color={getStatusColor(vehicle.status)}>{vehicle.status}</Tag>
+              </div>
             </Col>
+            <Col span={12}>
+              <img
+                src={vehicle.type === 'Tata Ace' ? tataAceImage : 
+                     vehicle.type === '307' ? truckImage : canterImage}
+                alt={vehicle.type}
+                style={{ width: '100%', maxWidth: '150px' }}
+              />
+            </Col>
+            <Col span={12}>
+              <div style={{ marginBottom: '8px' }}>
+                <strong>Driver:</strong> {vehicle.driver.name}
+              </div>
+              <div style={{ marginBottom: '8px' }}>
+                <strong>Location:</strong> {vehicle.currentLocation}
+              </div>
+              <div style={{ marginBottom: '8px' }}>
+                <strong>Destination:</strong> {vehicle.destination}
+              </div>
+              <div style={{ marginBottom: '8px' }}>
+                <strong>Last Updated:</strong> {vehicle.lastUpdated}
+              </div>
+              <div>
+                <strong>Speed:</strong> {vehicle.speed}
+              </div>
+            </Col>
+          </Row>
+        </Card>
+      ))}
+    </div>
+  </Card>
+</Col>
 
             {/* Map Section */}
             <Col span={12}>
-              <Card 
-                title={
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <EnvironmentOutlined style={{ fontSize: '20px', marginRight: '8px' }} />
-                    Vehicle Tracking
-                  </div>
-                }
-                bordered={false}
-                style={{ height: '650px' }}
-              >
-                <MapContainer 
-                  center={selectedVehicle ? selectedVehicle.coordinates : [12.9716, 77.5946]} 
-                  zoom={13} 
-                  style={{ height: '520px', width: '100%' }}
-                >
-                  <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  />
-                  {selectedVehicle && (
-                    <>
-                      <Marker position={selectedVehicle.coordinates} icon={vehicleIcon}>
-                        <Popup>
-                          <div>
-                            <strong>{selectedVehicle.vehicleId}</strong><br />
-                            Driver: {selectedVehicle.driver.name}<br />
-                            Status: {selectedVehicle.status}<br />
-                            Speed: {selectedVehicle.speed}
-                          </div>
-                        </Popup>
-                      </Marker>
-                      <Marker position={selectedVehicle.destinationCoordinates}>
-                        <Popup>
-                          <div>
-                            <strong>Destination</strong><br />
-                            {selectedVehicle.destination}
-                          </div>
-                        </Popup>
-                      </Marker>
-                      <Polyline 
-                        positions={[selectedVehicle.coordinates, selectedVehicle.destinationCoordinates]}
-                        color="blue"
-                      />
-                    </>
-                  )}
-                </MapContainer>
-              </Card>
-            </Col>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* Map Section */}
+            <Card 
+                  title={
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <EnvironmentOutlined style={{ fontSize: '20px', marginRight: '8px' }} />
+                      Vehicle Tracking
+                    </div>
+                 }
+                 bordered={false}
+                 style={{ height: '450px' }}
+               >
+              <MapContainer 
+                    center={selectedVehicle ? selectedVehicle.coordinates : [12.9716, 77.5946]} 
+                    zoom={13} 
+                    style={{ height: '350px', width: '100%' }}
+                  >
+       <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    />
+      {selectedVehicle && (
+        <>
+          <Marker position={selectedVehicle.coordinates} icon={vehicleIcon}>
+            <Popup>
+              <div>
+                <strong>{selectedVehicle.vehicleId}</strong><br />
+                Driver: {selectedVehicle.driver.name}<br />
+                Status: {selectedVehicle.status}<br />
+                Speed: {selectedVehicle.speed}
+              </div>
+            </Popup>
+          </Marker>
+          <Marker position={selectedVehicle.destinationCoordinates}>
+            <Popup>
+              <div>
+                <strong>Destination</strong><br />
+                {selectedVehicle.destination}
+              </div>
+            </Popup>
+          </Marker>
+          <Polyline 
+            positions={[selectedVehicle.coordinates, selectedVehicle.destinationCoordinates]}
+            color="blue"
+          />
+        </>
+      )}
+    </MapContainer>
+  </Card>
 
-            {/* Driver Details Section */}
-            <Col span={24}>
-              <Spin spinning={loading}>
-                {selectedVehicle && (
-                  <DriverDetailsCard driver={selectedVehicle.driver} />
-                )}
-              </Spin>
+
+  <Spin spinning={loading}>
+                  {selectedVehicle && (
+                    <DriverDetailsCard 
+                      driver={selectedVehicle.driver} 
+                      loadPercentage={selectedVehicle.loadPercentage}
+                    />
+                  )}
+                </Spin>
+                </div>
             </Col>
           </Row>
         </Content>
-      </Layout>
+    
     </Layout>
   );
 };
