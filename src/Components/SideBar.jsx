@@ -6,6 +6,12 @@ import {
   CarOutlined,
   EnvironmentOutlined,
   DollarOutlined,
+  ScheduleOutlined,
+  GlobalOutlined,
+  SettingOutlined,
+  LogoutOutlined,
+  HistoryOutlined,
+  LineChartOutlined, // Import an icon for Route Optimization
 } from '@ant-design/icons';
 import logo from '../assets/cmtilogo.png'; // Adjust the path to your logo
 
@@ -15,37 +21,57 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedKey, setSelectedKey] = useState('1');
+  const [userRole, setUserRole] = useState('');
 
-  // Map routes to menu keys
-  const routeToKeyMap = {
-    '/dashboard': '1',
-    '/orders': '2',
-    '/vehicles': '3',
-    '/routes': '4',
-    '/billing': '5',
-  };
-
-  // Map menu keys to routes (inverse of routeToKeyMap)
-  const keyToRouteMap = {
-    '1': '/dashboard',
-    '2': '/orders',
-    '3': '/vehicles',
-    '4': '/routes',
-    '5': '/billing',
-  };
-
-  // Update selected key when route changes
   useEffect(() => {
-    const pathname = location.pathname;
-    // Find the matching key for the current route
-    const matchingKey = routeToKeyMap[pathname] || '1';
-    setSelectedKey(matchingKey);
+    const role = localStorage.getItem('userRole');
+    setUserRole(role);
+
+    if (location.pathname.startsWith('/admin')) {
+      setUserRole('admin');
+    } else if (location.pathname.startsWith('/user')) {
+      setUserRole('user');
+    }
   }, [location.pathname]);
 
+  const adminMenuItems = [
+    { key: '1', icon: <DashboardOutlined />, label: 'Dashboard', path: '/admin/dashboard' },
+    { key: '2', icon: <CarOutlined />, label: 'Orders', path: '/admin/orders' },
+    { key: '3', icon: <CarOutlined />, label: 'Vehicles', path: '/admin/vehicles' },
+    { key: '4', icon: <EnvironmentOutlined />, label: 'Routes', path: '/admin/routes' },
+    { key: '5', icon: <LineChartOutlined />, label: 'Route Optimization', path: '/admin/route-optimization' },
+    { key: '6', icon: <DollarOutlined />, label: 'Billing', path: '/admin/billing' },
+    { key: '7', icon: <SettingOutlined />, label: 'Settings', path: '/admin/settings' },
+    { key: '8', icon: <LogoutOutlined />, label: 'Logout', path: '/logout' },
+  ];
+
+  const userMenuItems = [
+    { key: '1', icon: <DashboardOutlined />, label: 'Dashboard', path: '/user/dashboard' },
+    { key: '2', icon: <ScheduleOutlined />, label: 'Schedule Delivery', path: '/user/schedule' },
+    { key: '3', icon: <GlobalOutlined />, label: 'Track Delivery', path: '/user/track' },
+    { key: '4', icon: <HistoryOutlined />, label: 'History', path: '/user/history' },
+    { key: '5', icon: <LogoutOutlined />, label: 'Logout', path: '/logout' },
+  ];
+
+  const menuItems = userRole === 'admin' ? adminMenuItems : userMenuItems;
+
+  useEffect(() => {
+    const pathname = location.pathname;
+    const matchingItem = menuItems.find(item => item.path === pathname);
+    if (matchingItem) {
+      setSelectedKey(matchingItem.key);
+    }
+  }, [location.pathname, menuItems]);
+
   const handleMenuClick = (e) => {
-    const route = keyToRouteMap[e.key];
-    if (route) {
-      navigate(route);
+    const item = menuItems.find(item => item.key === e.key);
+    if (item) {
+      if (item.label === 'Logout') {
+        localStorage.removeItem('userRole');
+        navigate('/');
+      } else {
+        navigate(item.path);
+      }
       setSelectedKey(e.key);
     }
   };
@@ -60,14 +86,13 @@ const Sidebar = () => {
         bottom: 0,
         background: '#fff',
         display: 'flex',
-        flexDirection: 'column', // Ensures the content stacks vertically
-        justifyContent: 'space-between', // Spaces the content properly
+        flexDirection: 'column',
+        justifyContent: 'space-between',
       }}
       breakpoint="lg"
       collapsedWidth="0"
     >
       <div>
-        {/* Logo at the top of the sidebar */}
         <div style={{ padding: '10px', textAlign: 'center' }}>
           <img 
             src={logo} 
@@ -82,15 +107,14 @@ const Sidebar = () => {
           style={{ height: '100%', borderRight: 0 }}
           onClick={handleMenuClick}
         >
-          <Menu.Item key="1" icon={<DashboardOutlined />}>Dashboard</Menu.Item>
-          <Menu.Item key="2" icon={<CarOutlined />}>Orders</Menu.Item>
-          <Menu.Item key="3" icon={<CarOutlined />}>Vehicles</Menu.Item>
-          <Menu.Item key="4" icon={<EnvironmentOutlined />}>Routes</Menu.Item>
-          <Menu.Item key="5" icon={<DollarOutlined />}>Billing</Menu.Item>
+          {menuItems.map(item => (
+            <Menu.Item key={item.key} icon={item.icon}>
+              {item.label}
+            </Menu.Item>
+          ))}
         </Menu>
       </div>
 
-      {/* CMTI link at the bottom */}
       <div style={{ padding: '10px', textAlign: 'center' }}>
         <a 
           href="http://www.cmti.res.in" 

@@ -106,6 +106,7 @@ const recentOrdersColumns = [
     filters: [
       { text: 'Pending', value: 'Pending' },
       { text: 'Completed', value: 'Completed' },
+      { text: 'In Transit', value: 'In Transit' }, // Add this if you have "In Transit" status in data
     ],
     onFilter: (value, record) => record.status.indexOf(value) === 0,
     filterIcon: (filtered) => (
@@ -120,11 +121,13 @@ const iconStyle = {
   right: '10px',
   transform: 'translateY(-50%)',
   fontSize: '30px',
-  color: '#007BFF', // Consistent color
+  color: '#007BFF', // Change color to your desired color
 };
+
 const OrderManagement = () => {
   const [orderDetailsData, setOrderDetailsData] = useState([]);
 
+  // Function to simulate loading data into "Order Details"
   const handleLoadData = () => {
     const randomOrders = [
       {
@@ -148,29 +151,29 @@ const OrderManagement = () => {
   };
 
   return (
-    <div className="fixed-layout"> {/* Adding a fixed layout class */}
+    <>
       <Row gutter={16}>
         <Col span={8}>
-          <Card className="custom-card">
+          <Card style={{ position: 'relative' }}>
             <Statistic title="Total Orders" value={100} />
-            <CodeSandboxOutlined style={iconStyle} />
+            <CodeSandboxOutlined style={iconStyle} /> {/* CodeSandbox icon at top right */}
           </Card>
         </Col>
         <Col span={8}>
-          <Card className="custom-card">
+          <Card style={{ position: 'relative' }}>
             <Statistic title="Pending Orders" value={30} />
-            <CodeSandboxOutlined style={iconStyle} />
+            <CodeSandboxOutlined style={iconStyle} /> {/* CodeSandbox icon at top right */}
           </Card>
         </Col>
         <Col span={8}>
-          <Card className="custom-card">
+          <Card style={{ position: 'relative' }}>
             <Statistic title="Completed Today" value={25} />
-            <CodeSandboxOutlined style={iconStyle} />
+            <CodeSandboxOutlined style={iconStyle} /> {/* CodeSandbox icon at top right */}
           </Card>
         </Col>
       </Row>
 
-      <Row gutter={16} style={{ marginTop: 24, marginBottom: 16 }}>
+      {/* <Row gutter={16} style={{ marginTop: 24, marginBottom: 16 }}>
         <Col span={24}>
           <Space size="large">
             <DatePicker.RangePicker style={{ width: 300 }} placeholder={['Start Date', 'End Date']} />
@@ -178,18 +181,25 @@ const OrderManagement = () => {
             <Button
               type="primary"
               onClick={handleLoadData}
-              className="custom-button" // Button styling
+              style={{
+                // background: 'linear-gradient(90deg, #007BFF 0%, #00C6FF 100%)',
+                border: 'none',
+                // color: '#fff',
+                borderRadius: '5px',
+                padding: '5px 15px',
+                fontWeight: 'bold',
+              }}
               size="large"
             >
               Load Orders
             </Button>
           </Space>
         </Col>
-      </Row>
+      </Row> */}
 
-      <Row gutter={16}>
+      {/* <Row gutter={16}>
         <Col span={24}>
-          <Card title="Order Details" className="custom-card">
+          <Card title="Order Details" style={{ borderRadius: '15px' }}>
             {orderDetailsData.length === 0 ? (
               <Empty description="No Data Available" />
             ) : (
@@ -197,16 +207,16 @@ const OrderManagement = () => {
             )}
           </Card>
         </Col>
-      </Row>
+      </Row> */}
 
       <Row gutter={16}>
         <Col span={24}>
-          <Card title="Recent Orders" className="custom-card" style={{ marginTop: '10px' }}>
+          <Card title="Recent Orders" style={{ borderRadius: '15px', marginTop: '10px' }}>
             <Table columns={recentOrdersColumns} dataSource={recentOrdersData} pagination={false} bordered />
           </Card>
         </Col>
       </Row>
-    </div>
+    </>
   );
 };
 

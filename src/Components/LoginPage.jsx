@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Checkbox, Card, Typography, Row, Col, message } from 'antd';
+import { Form, Input, Button, Checkbox, Card, Typography, Row, Col, message, Select } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import loginImage from '../assets/login.png'; // Import the image
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 const { Title, Text } = Typography;
+const { Option } = Select;
 
 const SignUpPage = () => {
     const [form] = Form.useForm();
@@ -18,7 +19,12 @@ const SignUpPage = () => {
   const onFinishSignIn = (values) => {
     console.log('Sign In submitted:', values);
     message.success('Logged in successfully!');
-    navigate('/dashboard'); // Navigate to the admin dashboard
+    localStorage.setItem('userRole', values.role); // Store the role
+    if (values.role === 'admin') {
+      navigate('/admin/dashboard');
+    } else {
+      navigate('/user/dashboard');
+    }
   };
 
   return (
@@ -68,7 +74,7 @@ const SignUpPage = () => {
                 name="email"
                 rules={[{ required: true, message: 'Please input your Email!' }]}
               >
-                <Input prefix={<UserOutlined />} placeholder="yatingzang0215@gmail.com" />
+                <Input prefix={<UserOutlined />} placeholder="centralmanufacturing@cmti.res.in" />
               </Form.Item>
 
               <Form.Item
@@ -120,6 +126,17 @@ const SignUpPage = () => {
                 rules={[{ required: true, message: 'Please input your Password!' }]}
               >
                 <Input.Password prefix={<LockOutlined />} placeholder="Password" />
+              </Form.Item>
+
+              {/* New dropdown for user/admin selection */}
+              <Form.Item
+                name="role"
+                rules={[{ required: true, message: 'Please select a role!' }]}
+              >
+                <Select placeholder="Select a role">
+                  <Option value="user">User</Option>
+                  <Option value="admin">Admin</Option>
+                </Select>
               </Form.Item>
             </>
           )}
