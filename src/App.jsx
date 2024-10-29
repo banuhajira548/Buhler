@@ -14,6 +14,8 @@ import TrackDelivery from './Components/TrackDelivery';
 import HistoryPage from './Components/HistoryPage';
 import BillingPage from './Components/BillingPage';
 import RouteOptimization from './Components/RouteOptimization';
+// import { Routes, Route } from 'react-router-dom';
+import OrderDetailsPage from './Components/OrderDetailsPage';
 
 const { Content } = Layout;
 
@@ -42,10 +44,12 @@ const App = () => {
                       <Routes>
                         <Route path="/admin/dashboard" element={<DashboardContent />} />
                         <Route path="/admin/orders" element={<Orders />} />
+                        <Route path='/admin/order-details' element={<OrderDetailsPage/>}/>
                         <Route path="/admin/vehicles" element={<Vehicles />} />
                         <Route path="/admin/routes" element={<CustomRoute />} />
                         <Route path="/admin/billing" element={<BillingPage/>} />
                         <Route path="/admin/route-optimization" element={<RouteOptimization/>}></Route>
+
                         
                         <Route path="/user/dashboard" element={<UserDashboard />} />
                         <Route path="/user/schedule" element={<ScheduleDelivery />} />

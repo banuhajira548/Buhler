@@ -39,7 +39,9 @@ const Sidebar = () => {
     { key: '3', icon: <CarOutlined />, label: 'Vehicles', path: '/admin/vehicles' },
     { key: '4', icon: <EnvironmentOutlined />, label: 'Routes', path: '/admin/routes' },
     { key: '6', icon: <FaRoute />, label: 'Route Optimization', path: '/admin/route-optimization' },
-    { key: '5', icon: <DollarOutlined />, label: 'Billing', path: '/admin/billing' }
+    { key: '5', icon: <DollarOutlined />, label: 'Billing', path: '/admin/billing' },
+    // { key: '7', icon: <DollarOutlined />, label: 'Order Requests', path: '/admin/order-details' },
+
   ];
 
   const userMenuItems = [

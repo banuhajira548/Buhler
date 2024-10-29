@@ -1,6 +1,6 @@
 import React from 'react';
-import { Layout, Typography, Dropdown, Menu, Card, Button } from 'antd';
-import { BellDot, CircleUserRound } from 'lucide-react';
+import { Layout, Typography, Dropdown, Menu, Card, Button, Badge } from 'antd';
+import { Bell, CircleUserRound } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const { Header } = Layout;
@@ -12,6 +12,10 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem('userRole');
     navigate('/');
+  };
+
+  const handleNotificationClick = () => {
+    navigate('/admin/order-details');
   };
 
   // Dropdown menu for user profile
@@ -84,9 +88,15 @@ const Navbar = () => {
         </Title>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-        {/* Notification Icon */}
-        <BellDot size={30} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '24px', marginRight:'10px'}}>
+        {/* Notification Icon with Badge */}
+        <Badge count={3} dot>
+          <Bell
+            size={30} 
+            style={{ cursor: 'pointer' }}
+            onClick={handleNotificationClick}
+          />
+        </Badge>
 
         {/* User Profile Dropdown */}
         <Dropdown overlay={userMenu} trigger={['click']}>
