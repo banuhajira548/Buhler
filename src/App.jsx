@@ -12,7 +12,8 @@ import UserDashboard from './Components/UserDashboard';
 import ScheduleDelivery from './Components/ScheduleDelivery';
 import TrackDelivery from './Components/TrackDelivery';
 import HistoryPage from './Components/HistoryPage';
-import BillingPage from './Components/BillingPage'
+import BillingPage from './Components/BillingPage';
+import RouteOptimization from './Components/RouteOptimization';
 
 const { Content } = Layout;
 
@@ -44,6 +45,7 @@ const App = () => {
                         <Route path="/admin/vehicles" element={<Vehicles />} />
                         <Route path="/admin/routes" element={<CustomRoute />} />
                         <Route path="/admin/billing" element={<BillingPage/>} />
+                        <Route path="/admin/route-optimization" element={<RouteOptimization/>}></Route>
                         
                         <Route path="/user/dashboard" element={<UserDashboard />} />
                         <Route path="/user/schedule" element={<ScheduleDelivery />} />

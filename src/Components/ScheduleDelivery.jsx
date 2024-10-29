@@ -47,6 +47,14 @@ const ScheduleDelivery = () => {
     navigate('/history');
   };
 
+  const inputStyle = {
+    transition: 'all 0.3s ease',
+    '&:hover': {
+      borderColor: '#40a9ff',
+      boxShadow: '0 0 0 2px rgba(24,144,255,0.2)'
+    }
+  };
+
   return (
     <Card
       title={<h3 className="text-4xl font-bold text-gray-800">SCHEDULE DELIVERY</h3>}
@@ -57,7 +65,14 @@ const ScheduleDelivery = () => {
       <Row gutter={[32, 32]}>
         <Col span={6}>
           <label className="block font-semibold mb-2 text-gray-600">Vendor Code</label>
-          <Input name="vendorCode" value={formData.vendorCode} onChange={handleInputChange} placeholder="16981918" className="p-6 text-lg font-sans" />
+          <Input 
+            name="vendorCode" 
+            value={formData.vendorCode} 
+            onChange={handleInputChange} 
+            placeholder="16981918" 
+            className="p-6 text-lg font-sans hover:border-blue-400 focus:border-blue-500 transition-all duration-300"
+            style={inputStyle}
+          />
         </Col>
         <Col span={6}>
           <label className="block font-semibold mb-2 text-gray-600">Vendor Name</label>

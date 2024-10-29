@@ -42,9 +42,9 @@ const BillingPage = () => {
   };
 
   return (
-    <div style={{ padding: '24px' }}>
-      <Card bordered={false} style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}>
-        <Title level={2} style={{ marginBottom: '24px', textAlign: 'center' }}>Billing Information</Title>
+    <div style={{ padding: '2px' }}>
+      <Card bordered={false} style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '2px' }}>
+        <Title level={2} style={{ marginBottom: '14px', textAlign: 'center' }}>Billing Information</Title>
 
         <Row gutter={24}>
           <Col span={12}>

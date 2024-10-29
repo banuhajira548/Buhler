@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { Layout, Card, Col, Row, Statistic, Table, Tag, DatePicker, Input, Space, Empty, Button } from 'antd';
+import { Card, Col, Row, Statistic, Table, Tag, DatePicker, Input, Space, Empty, Button } from 'antd';
 import { SearchOutlined, CaretDownOutlined } from '@ant-design/icons';
 import { FaTruck } from 'react-icons/fa'; // Import the truck icon
-
-const { Content } = Layout;
 
 const recentVehiclesData = [
   {
@@ -143,91 +141,87 @@ const VehicleManagement = () => {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Layout>
-        <Content style={{ padding: '24px', margin: '0', background: '#fff' }}>
-          <Row gutter={16}>
-            <Col span={8}>
-              <Card>
-                <Statistic 
-                  title="Total Vehicles" 
-                  value={25} 
-                  valueStyle={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} 
-                  suffix={<FaTruck style={{ fontSize: '24px', color: '#007BFF' }} />} // Truck icon on the right
-                />
-              </Card>
-            </Col>
-            <Col span={8}>
-              <Card>
-                <Statistic 
-                  title="Available Vehicles" 
-                  value={12} 
-                  valueStyle={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} 
-                  suffix={<FaTruck style={{ fontSize: '24px', color: '#007BFF' }} />} // Truck icon on the right
-                />
-              </Card>
-            </Col>
-            <Col span={8}>
-              <Card>
-                <Statistic 
-                  title="In Maintenance" 
-                  value={3} 
-                  valueStyle={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} 
-                  suffix={<FaTruck style={{ fontSize: '24px', color: '#007BFF' }} />} // Truck icon on the right
-                />
-              </Card>
-            </Col>
-          </Row>
+    <>
+      <Row gutter={16}>
+        <Col span={8}>
+          <Card>
+            <Statistic 
+              title="Total Vehicles" 
+              value={25} 
+              valueStyle={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} 
+              suffix={<FaTruck style={{ fontSize: '24px', color: '#007BFF' }} />}
+            />
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card>
+            <Statistic 
+              title="Available Vehicles" 
+              value={12} 
+              valueStyle={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} 
+              suffix={<FaTruck style={{ fontSize: '24px', color: '#007BFF' }} />}
+            />
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card>
+            <Statistic 
+              title="In Maintenance" 
+              value={3} 
+              valueStyle={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} 
+              suffix={<FaTruck style={{ fontSize: '24px', color: '#007BFF' }} />}
+            />
+          </Card>
+        </Col>
+      </Row>
 
-          {/* Date and Search Options */}
-          <Row gutter={16} style={{ marginTop: 24, marginBottom: 16 }}>
-            <Col span={24}>
-              <Space size="large">
-                <DatePicker.RangePicker style={{ width: 300 }} placeholder={['Start Date', 'End Date']} />
-                <Input placeholder="Search by Vehicle ID or Status" prefix={<SearchOutlined />} style={{ width: 250 }} />
-                <Button
-                  type="primary"
-                  onClick={handleLoadVehicles}
-                  style={{
-                    // background: 'linear-gradient(90deg, #007BFF 0%, #00C6FF 100%)',
-                    border: 'none',
-                    color: '#fff',
-                    borderRadius: '5px',
-                    padding: '5px 15px',
-                    fontWeight: 'bold',
-                  }}
-                  size="large"
-                >
-                  Load Vehicles
-                </Button>
-              </Space>
-            </Col>
-          </Row>
+      {/* Date and Search Options */}
+      <Row gutter={16} style={{ marginTop: 24, marginBottom: 16 }}>
+        <Col span={24}>
+          <Space size="large">
+            <DatePicker.RangePicker style={{ width: 300 }} placeholder={['Start Date', 'End Date']} />
+            <Input placeholder="Search by Vehicle ID or Status" prefix={<SearchOutlined />} style={{ width: 250 }} />
+            <Button
+              type="primary"
+              onClick={handleLoadVehicles}
+              style={{
+                // background: 'linear-gradient(90deg, #007BFF 0%, #00C6FF 100%)',
+                border: 'none',
+                color: '#fff',
+                borderRadius: '5px',
+                padding: '5px 15px',
+                fontWeight: 'bold',
+              }}
+              size="large"
+            >
+              Load Vehicles
+            </Button>
+          </Space>
+        </Col>
+      </Row>
 
-          {/* Vehicle Details */}
-          <Row gutter={16}>
-            <Col span={24}>
-              <Card title="Vehicle Details" style={{ borderRadius: '15px' }}>
-                {vehicleDetailsData.length === 0 ? (
-                  <Empty description="No Data Available" />
-                ) : (
-                  <Table columns={recentVehiclesColumns} dataSource={vehicleDetailsData} pagination={false} bordered />
-                )}
-              </Card>
-            </Col>
-          </Row>
+      {/* Vehicle Details */}
+      <Row gutter={16}>
+        <Col span={24}>
+          <Card title="Vehicle Details" style={{ borderRadius: '15px' }}>
+            {vehicleDetailsData.length === 0 ? (
+              <Empty description="No Data Available" />
+            ) : (
+              <Table columns={recentVehiclesColumns} dataSource={vehicleDetailsData} pagination={false} bordered />
+            )}
+          </Card>
+        </Col>
+      </Row>
 
-          {/* Recent Vehicles */}
-          <Row gutter={16}>
-            <Col span={24}>
-              <Card title="Recent Vehicles" style={{ borderRadius: '15px', marginTop: '10px' }}>
-                <Table columns={recentVehiclesColumns} dataSource={recentVehiclesData} pagination={false} bordered />
-              </Card>
-            </Col>
-          </Row>
-        </Content>
-      </Layout>
-    </Layout>
+      {/* Recent Vehicles */}
+      <Row gutter={16}>
+        <Col span={24}>
+          <Card title="Recent Vehicles" style={{ borderRadius: '15px', marginTop: '10px' }}>
+            <Table columns={recentVehiclesColumns} dataSource={recentVehiclesData} pagination={false} bordered />
+          </Card>
+        </Col>
+      </Row>
+    </>
   );
 };
 

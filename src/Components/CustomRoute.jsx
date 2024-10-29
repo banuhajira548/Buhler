@@ -65,7 +65,8 @@ const TruckLoadVisualization = ({ loadPercentage = 0 }) => {
   const normalizedPercentage = Math.min(100, Math.max(0, loadPercentage));
 
   return (
-    <div className="relative w-full h-48">
+    
+    <div className="relative w-full h-18">
       <svg
         viewBox="0 0 140 100" // Adjusted viewBox for a larger scale
         className="w-full h-full"
@@ -161,6 +162,8 @@ const TruckLoadVisualization = ({ loadPercentage = 0 }) => {
         </g>
       </svg>
     </div>
+
+    
   );
 };
 
@@ -300,14 +303,14 @@ const recentVehiclesData = [
 
 
 const VehicleManagement = () => {
-  const [selectedVehicle, setSelectedVehicle] = useState(null);
-  const [vehiclePosition, setVehiclePosition] = useState(null);
+  const [selectedVehicle, setSelectedVehicle] = useState(recentVehiclesData[0]);
+  const [vehiclePosition, setVehiclePosition] = useState(recentVehiclesData[0].coordinates);
   const [loading, setLoading] = useState(false);
   const [vehicles, setVehicles] = useState(recentVehiclesData);
   const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
-    if (selectedVehicle && selectedVehicle.status === 'In Transit') {
+    if (selectedVehicle) {
       setVehiclePosition(selectedVehicle.coordinates);
     }
   }, [selectedVehicle]);
@@ -341,8 +344,7 @@ const VehicleManagement = () => {
   };
 
   return (
-    <Layout>
-      <Content style={{ padding: '10px', margin: '0', background: '#f0f2f5' }}>
+  
         <Row gutter={[16, 16]}>
           <Col span={10}>
             <Card
@@ -490,7 +492,7 @@ const VehicleManagement = () => {
                         bottom: 0,
                         left: 0,
                         right: 0,
-                        height: '300px',
+                        height: '290px',
                         margin: '24px',
                         boxShadow: '0 -4px 12px rgba(0,0,0,0.1)',
                         borderRadius: '8px',
@@ -498,53 +500,46 @@ const VehicleManagement = () => {
                         zIndex: 1000
                       }}
                       bodyStyle={{
-                        padding: '24px'
+                        padding: 'px'
                       }}
                     >
-                      <Row gutter={[24, 24]}>
-                        <Col span={8}>
-                          <div style={{ textAlign: 'center' }}>
-                            <img
-                              src={selectedVehicle.driver.image}
-                              alt={selectedVehicle.driver.name}
-                              style={{ 
-                                width: '120px',
-                                height: '120px',
-                                borderRadius: '60px',
-                                objectFit: 'cover',
-                                marginBottom: '12px'
-                              }}
-                            />
-                            <Title level={4} style={{ margin: '0' }}>{selectedVehicle.driver.name}</Title>
-                            <Tag color="blue" style={{ marginTop: '8px' }}>{selectedVehicle.status}</Tag>
-                          </div>
-                        </Col>
-                        <Col span={16}>
-                          <div style={{ 
-                            background: '#f5f5f5', 
-                            padding: '16px', 
-                            borderRadius: '8px',
-                            height: '100%'
-                          }}>
-                            <div style={{ marginBottom: '12px' }}>
-                              <Title level={5} style={{ margin: '0', marginBottom: '8px' }}>Load Status</Title>
-                              <TruckLoadVisualization loadPercentage={selectedVehicle.loadPercentage} />
-                            </div>
-                            <div style={{ 
-                              display: 'flex', 
-                              justifyContent: 'space-between',
-                              marginTop: '8px'
-                            }}>
-                              {/* <div>
-                                <div style={{ color: '#8c8c8c', fontSize: '12px' }}>Current Load</div>
-                                <div style={{color : '#8c8c8c', fontSize: '12px'}}>Current Location </div>
-                                <div style={{ fontWeight: '500' }}>{selectedVehicle.loadPercentage}%</div>
-                                <div style={{ fontWeight: '500'}}>{selectedVehicle.loadPercentage}%</div>
-                              </div> */}
-                            </div>
-                          </div>
-                        </Col>
-                      </Row>
+<Row gutter={[24, 24]}>
+  <Col span={8}>
+    <div style={{ textAlign: 'center' }}>
+      <img
+        src={selectedVehicle.driver.image}
+        alt={selectedVehicle.driver.name}
+        style={{ 
+          width: '140px', // Increased size
+          height: '140px',
+          borderRadius: '70px',
+          objectFit: 'cover',
+          marginBottom: '12px'
+        }}
+      />
+      <Title level={4} style={{ margin: '0' }}>{selectedVehicle.driver.name}</Title>
+      <Tag color="blue" style={{ marginTop: '8px' }}>{selectedVehicle.status}</Tag>
+    </div>
+  </Col>
+
+  <Col span={16}>
+    <div style={{ marginTop: '-30px' }}> {/* Increased negative margin to pull it further up */}
+      <div style={{ marginBottom: '0px' }}>
+         {/* <Title level={5} style={{ margin: '0', marginBottom: '0', marginLeft: '12px' }}>Load Status</Title> Adjusted marginLeft */}
+        <div style={{ transform: 'scale(0.8)', transformOrigin: 'top left' }}> {/* Scale down the truck load visualization */}
+          <TruckLoadVisualization loadPercentage={selectedVehicle.loadPercentage} />
+        </div>
+      </div>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between',
+        marginTop: '8px'
+      }}>
+        {/* Additional content can go here */}
+      </div>
+    </div>
+  </Col>
+</Row>           
                     </Card>
                   </>
                 )
@@ -552,9 +547,7 @@ const VehicleManagement = () => {
             </Card>
             </Col>
           </Row>
-        </Content>
-    
-    </Layout>
+     
   );
 };
 

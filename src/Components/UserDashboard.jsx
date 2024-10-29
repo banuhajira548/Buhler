@@ -187,64 +187,60 @@ const OrderManagement = () => {
     <>
       <Row gutter={16}>
         <Col span={8}>
-          <Card style={{ position: 'relative' }}>
+          <Card 
+            style={{ 
+              position: 'relative',
+              boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer'
+            }}
+            hoverable
+          >
             <Statistic title="Total Orders" value={100} />
-            <CodeSandboxOutlined style={iconStyle} /> {/* CodeSandbox icon at top right */}
+            <CodeSandboxOutlined style={iconStyle} />
           </Card>
         </Col>
         <Col span={8}>
-          <Card style={{ position: 'relative' }}>
+          <Card 
+            style={{ 
+              position: 'relative',
+              boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer'
+            }}
+            hoverable
+          >
             <Statistic title="Pending Orders" value={30} />
-            <CodeSandboxOutlined style={iconStyle} /> {/* CodeSandbox icon at top right */}
+            <CodeSandboxOutlined style={iconStyle} />
           </Card>
         </Col>
         <Col span={8}>
-          <Card style={{ position: 'relative' }}>
+          <Card 
+            style={{ 
+              position: 'relative',
+              boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer'
+            }}
+            hoverable
+          >
             <Statistic title="Completed Today" value={25} />
-            <CodeSandboxOutlined style={iconStyle} /> {/* CodeSandbox icon at top right */}
+            <CodeSandboxOutlined style={iconStyle} />
           </Card>
         </Col>
       </Row>
 
-      {/* <Row gutter={16} style={{ marginTop: 24, marginBottom: 16 }}>
-        <Col span={24}>
-          <Space size="large">
-            <DatePicker.RangePicker style={{ width: 300 }} placeholder={['Start Date', 'End Date']} />
-            <Input placeholder="Search by Order ID or Status" prefix={<SearchOutlined />} style={{ width: 250 }} />
-            <Button
-              type="primary"
-              onClick={handleLoadData}
-              style={{
-                // background: 'linear-gradient(90deg, #007BFF 0%, #00C6FF 100%)',
-                border: 'none',
-                // color: '#fff',
-                borderRadius: '5px',
-                padding: '5px 15px',
-                fontWeight: 'bold',
-              }}
-              size="large"
-            >
-              Load Orders
-            </Button>
-          </Space>
-        </Col>
-      </Row> */}
-
-      {/* <Row gutter={16}>
-        <Col span={24}>
-          <Card title="Order Details" style={{ borderRadius: '15px' }}>
-            {orderDetailsData.length === 0 ? (
-              <Empty description="No Data Available" />
-            ) : (
-              <Table columns={recentOrdersColumns} dataSource={orderDetailsData} pagination={false} bordered />
-            )}
-          </Card>
-        </Col>
-      </Row> */}
-
       <Row gutter={16}>
         <Col span={24}>
-          <Card title="Recent Orders" style={{ borderRadius: '15px', marginTop: '10px' }}>
+          <Card 
+            title="Recent Orders" 
+            style={{ 
+              borderRadius: '15px', 
+              marginTop: '10px',
+              boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+            }}
+            hoverable
+          >
             <Table columns={recentOrdersColumns} dataSource={recentOrdersData} pagination={false} bordered />
           </Card>
         </Col>

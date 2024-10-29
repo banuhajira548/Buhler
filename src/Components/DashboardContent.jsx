@@ -221,7 +221,7 @@ const StatCard = ({ title, value, prefix, suffix, icon: Icon, trend, color }) =>
 
 const SupervisorDash = () => {
   return (
-    <div style={{ padding: '24px' }}>
+    <div style={{ padding: '4px' }}>
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
           <StatCard 

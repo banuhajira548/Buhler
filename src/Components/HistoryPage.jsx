@@ -135,7 +135,12 @@ const HistoryPage = () => {
           <Card 
             title="Today's Requests" 
             className="w-full"
-            style={{ width: '100%' }}
+            style={{ 
+              width: '100%',
+              boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+              marginBottom: '16px'
+            }}
+            hoverable
           >
             <Table
               columns={todayColumns}
@@ -149,7 +154,11 @@ const HistoryPage = () => {
           <Card 
             title="Request History" 
             className="w-full"
-            style={{ width: '100%' }}
+            style={{ 
+              width: '100%',
+              boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+            }}
+            hoverable
           >
             <Table
               columns={historyColumns}
