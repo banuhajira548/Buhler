@@ -189,13 +189,13 @@ const recentVehiclesData = [
       status: 'Active'
     },
     status: 'In Transit',
-    currentLocation: 'Indiranagar',
-    destination: 'Koramangala',
+    currentLocation: 'M G Road',
+    destination: 'Indiranagar',
     coordinates: [12.9716, 77.6411],
     destinationCoordinates: [12.9352, 77.6245],
     lastUpdated: '10 mins ago',
     fuelLevel: '75%',
-    speed: '60 km/h'
+    // speed: '60 km/h'
   },
   {
     key: 2,
@@ -214,13 +214,13 @@ const recentVehiclesData = [
       status: 'Active'
     },
     status: 'Completed',
-    currentLocation: 'MG Road',
+    currentLocation: 'Kormangala',
     destination: 'Brigade Road',
     coordinates: [12.9726, 77.6138],
     destinationCoordinates: [12.9654, 77.6135],
     lastUpdated: '5 mins ago',
     fuelLevel: '50%',
-    speed: '45 km/h'
+    // speed: '45 km/h'
   },
   {
     key: 3,
@@ -239,13 +239,13 @@ const recentVehiclesData = [
       status: 'Active'
     },
     status: 'In Transit',
-    currentLocation: 'Koramangala',
-    destination: 'HSR Layout',
+    currentLocation: 'White Field',
+    destination: 'Electronics City',
     coordinates: [12.9348, 77.6410],
     destinationCoordinates: [12.9236, 77.6174],
     lastUpdated: '15 mins ago',
     fuelLevel: '60%',
-    speed: '50 km/h'
+    // speed: '50 km/h'
   },
   {
     key: 4,
@@ -270,7 +270,7 @@ const recentVehiclesData = [
     destinationCoordinates: [12.9705, 77.7254],
     lastUpdated: '2 mins ago',
     fuelLevel: '30%',
-    speed: '55 km/h'
+    // speed: '55 km/h'
   },
   {
     key: 5,
@@ -295,7 +295,7 @@ const recentVehiclesData = [
     destinationCoordinates: [12.9318, 77.5900],
     lastUpdated: '30 mins ago',
     fuelLevel: '20%',
-    speed: '30 km/h'
+    // speed: '30 km/h'
   }
 ];
 
@@ -352,7 +352,7 @@ const VehicleManagement = () => {
               bordered={false}
               style={{ 
                 width: '100%', 
-                height: '785px'
+                height: '830px'
               }}
               bodyStyle={{ 
                 padding: '20px',
@@ -415,7 +415,7 @@ const VehicleManagement = () => {
                 <strong>Last Updated:</strong> {vehicle.lastUpdated}
               </div>
               <div>
-                <strong>Speed:</strong> {vehicle.speed}
+                {/* <strong>Speed:</strong> {vehicle.speed} */}
               </div>
             </Col>
           </Row>
@@ -436,7 +436,7 @@ const VehicleManagement = () => {
               }
               bordered={false}
               style={{ 
-                height: '785px',  // Match the height of the Vehicle Fleet card
+                height: '830px',  // Match the height of the Vehicle Fleet card
                 position: 'relative' // Added for absolute positioning of driver details
               }}
             >
@@ -447,7 +447,7 @@ const VehicleManagement = () => {
                   <>
                     <MapContainer 
                       style={{ 
-                        height: '380px',  // Reduced map height
+                        height: '420px',  // Reduced map height
                         marginBottom: '0px' // Add space for driver details card
                       }}
                       center={selectedVehicle ? selectedVehicle.coordinates : [12.9716, 77.5946]} 
@@ -465,7 +465,7 @@ const VehicleManagement = () => {
                                 <strong>{selectedVehicle.vehicleId}</strong><br />
                                 Driver: {selectedVehicle.driver.name}<br />
                                 Status: {selectedVehicle.status}<br />
-                                Speed: {selectedVehicle.speed}
+                                {/* Speed: {selectedVehicle.speed} */}
                               </div>
                             </Popup>
                           </Marker>

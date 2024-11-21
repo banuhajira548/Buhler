@@ -115,9 +115,8 @@ const OrderDetailsPage = () => {
                 </div>
               </Col>
               <Col>
-                {/* <Tag className='mb-10' color="blue">2 hours ago</Tag> */}
                 <div>
-                  <Button type="default" style={{ marginRight:  16 }}>
+                  <Button type="default" style={{ marginRight: 16 }}>
                     Reject
                   </Button>
                   <Button type="primary">
@@ -129,44 +128,40 @@ const OrderDetailsPage = () => {
 
             <Divider />
 
-            {/* Order Information */}
+            {/* Order Information - Updated to use selectedOrder data */}
             <div className="mb-6">
               <Row gutter={[16, 16]}>
                 <Col span={12}>
                   <div className="flex items-center mb-2">
                     <Package size={16} className="mr-2" />
-                    <span className="text-base font-medium">Order ID: #123456</span>
+                    <span className="text-base font-medium">Order ID: #{selectedOrder.orderId}</span>
                   </div>
                   <div className="flex items-center">
                     <Clock size={16} className="mr-2" />
-                    <span className="text-sm">Order Placed: March 15, 2024</span>
+                    <span className="text-sm">Order Placed: {selectedOrder.date}</span>
                   </div>
                 </Col>
                 <Col span={12}>
                   <p className="text-sm leading-relaxed">
-                    Delivery of industrial equipment from CMTI warehouse to Andhra Pradesh distribution center.
+                    Delivery of industrial equipment from {selectedOrder.company} warehouse to {selectedOrder.deliveryAddress}.
                   </p>
                 </Col>
               </Row>
             </div>
 
-            {/* Address Blocks */}
+            {/* Address Blocks - Updated to use selectedOrder data */}
             <Row gutter={24} className="mb-6">
               <Col span={12}>
                 <Card className="bg-gray-50" size="small" title="Pickup Address">
                   <p className="text-sm m-0">
-                    123 Industrial Area, Phase 1
-                    <br />
-                    Central Manufacturing Technology Institute 400001
+                    {selectedOrder.pickupAddress}
                   </p>
                 </Card>
               </Col>
               <Col span={12}>
                 <Card className="bg-gray-50" size="small" title="Delivery Address">
                   <p className="text-sm m-0">
-                    456 Distribution Hub
-                    <br />
-                    Andhra Pradesh, 110001
+                    {selectedOrder.deliveryAddress}
                   </p>
                 </Card>
               </Col>
@@ -176,11 +171,11 @@ const OrderDetailsPage = () => {
             <Card size="small" className="mb-6">
               <div className="flex items-center">
                 <MapPin size={16} className="mr-2" />
-                <span className="text-sm font-medium">Mumbai — Andhra Pradesh</span>
+                <span className="text-sm font-medium">{selectedOrder.location} — {selectedOrder.deliveryAddress.split(',')[1]}</span>
               </div>
             </Card>
 
-            {/* Order Summary */}
+            {/* Order Summary - Updated to use selectedOrder data */}
             <Card 
               title="Order Summary" 
               className="mb-6"
@@ -190,32 +185,32 @@ const OrderDetailsPage = () => {
                 <Col span={8}>
                   <div className="text-sm">
                     <strong>Package Weight:</strong>
-                    <div>500 kg</div>
+                    <div>{selectedOrder.weight}</div>
                   </div>
                 </Col>
                 <Col span={8}>
                   <div className="text-sm">
                     <strong>Dimensions:</strong>
-                    <div>2m x 1.5m x 1m</div>
+                    <div>{selectedOrder.dimensions}</div>
                   </div>
                 </Col>
                 <Col span={8}>
                   <div className="text-sm">
                     <strong>Vehicle Type:</strong>
-                    <div>Commercial Truck</div>
+                    <div>{selectedOrder.vehicleType}</div>
                   </div>
                 </Col>
               </Row>
             </Card>
 
-            {/* Note Section */}
+            {/* Note Section - Updated to use selectedOrder data */}
             <Card 
               title="Additional Notes" 
               className="bg-gray-50"
               size="small"
             >
               <p className="text-sm m-0">
-                Fragile equipment. Handle with care. Delivery required during business hours.
+                {selectedOrder.notes}
               </p>
             </Card>
           </Card>

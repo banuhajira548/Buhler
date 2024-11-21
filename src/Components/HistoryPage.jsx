@@ -78,7 +78,15 @@ const HistoryPage = () => {
       title: 'Action',
       key: 'action',
       render: () => (
-        <Button type="primary">
+        <Button 
+          type="default"
+          style={{
+            borderColor: '#d9d9d9',
+            color: '#000000d9',
+            backgroundColor: 'transparent',
+            boxShadow: 'none'
+          }}
+        >
           Pending Approval
         </Button>
       ),

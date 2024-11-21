@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DatePicker, Card, Typography, Table, Checkbox, Button, Spin, Modal } from 'antd';
+import { DatePicker, Card, Typography, Table, Checkbox, Button, Spin, Modal, notification } from 'antd';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -19,36 +19,36 @@ const RouteOptimization = () => {
   const routes = [
     {
       key: 'routeA',
-      name: 'Route A',
+      name: 'REQ123',
       description: 'From MG Road to Indiranagar',
       distance: '8 km',
       estimatedTime: '20 mins',
-      startLocation: { lat: 12.9716, lng: 77.5946 },
-      endLocation: { lat: 12.9352, lng: 77.6243 },
+      startLocation: { lat: 12.9716, lng: 77.5946, name: 'MG Road' },
+      endLocation: { lat: 12.9352, lng: 77.6243, name: 'Indiranagar' },
     },
     {
       key: 'routeB',
-      name: 'Route B',
+      name: 'REQ456',
       description: 'From Koramangala to Brigade Road',
       distance: '5 km',
       estimatedTime: '15 mins',
-      startLocation: { lat: 12.9352, lng: 77.6243 },
-      endLocation: { lat: 12.9716, lng: 77.5946 },
+      startLocation: { lat: 12.9352, lng: 77.6243, name: 'Koramangala' },
+      endLocation: { lat: 12.9716, lng: 77.5946, name: 'Brigade Road' },
     },
     {
       key: 'routeC',
-      name: 'Route C',
+      name: 'REQ789',
       description: 'From Whitefield to Electronics City',
       distance: '22 km',
       estimatedTime: '45 mins',
-      startLocation: { lat: 12.9716, lng: 77.5946 },
-      endLocation: { lat: 12.9352, lng: 77.6243 },
+      startLocation: { lat: 12.9716, lng: 77.5946, name: 'Whitefield' },
+      endLocation: { lat: 12.9352, lng: 77.6243, name: 'Electronics City' },
     },
   ];
 
   const vehicles = [
     { key: 'vehicle1', id: 'V001', type: 'Truck', driver: 'John Doe', status: 'Available' },
-    { key: 'vehicle2', id: 'V002', type: 'Tata Ace', driver: 'Jane Smith', status: 'On Route' },
+    { key: 'vehicle2', id: 'V002', type: 'Tata Ace', driver: 'Jane Smith', status: 'Available' },
     { key: 'vehicle3', id: 'V003', type: '17 Canter', driver: 'Mike Johnson', status: 'Available' },
   ];
 
@@ -112,7 +112,7 @@ const RouteOptimization = () => {
           indeterminate={selectedRoutes.length > 0 && selectedRoutes.length < routes.length}
           onChange={(e) => handleSelectAllRoutes(e.target.checked)}
         >
-          Route Name
+          Request ID
         </Checkbox>
       ),
       dataIndex: 'name',
@@ -158,13 +158,30 @@ const RouteOptimization = () => {
     { title: 'Status', dataIndex: 'status', key: 'status' },
   ];
 
+  const handleConfirm = () => {
+    if (selectedRouteDetails.length > 0) {
+      const fromLocation = selectedRouteDetails[0].startLocation.name;
+      const toLocation = selectedRouteDetails[0].endLocation.name;
+      openNotification(fromLocation, toLocation);
+    }
+  };
+
+  const openNotification = (from, to) => {
+    notification.open({
+      message: 'Tripsheet Generated and Sent, You can track your order in Routes',
+      // description: `From: ${from} | To: ${to}`,
+      placement: 'topRight', // Display at the top right corner
+      duration: 3, // Notification duration in seconds
+    });
+  };
+
   return (
     <Card title="Route Optimization" style={{ width: '100%', padding: '20px' }}>
       <Title level={5}>Select Date</Title>
-      <DatePicker onChange={handleDateChange} style={{ width: '100%' }} />
+      <DatePicker onChange={handleDateChange} style={{ width: '18%' }} />
 
       <div style={{ marginTop: '20px' }}>
-        <Title level={5}>Route Details</Title>
+        <Title level={5}>Request Details</Title>
         <Table
           columns={routeColumns}
           dataSource={routes}
@@ -185,7 +202,7 @@ const RouteOptimization = () => {
 
       <div style={{ marginTop: '20px', textAlign: 'right' }}>
         <Button type="primary" onClick={handleRouteOptimization} disabled={loading} style={{ marginRight: '10px' }}>
-          Route Optimization
+          Optimize Route
         </Button>
         <Button type="default" onClick={() => console.log("Previewing selected routes and vehicles")} disabled={loading}>
           Preview
@@ -193,13 +210,13 @@ const RouteOptimization = () => {
       </div>
 
       {loading && (
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+        <div style={{ textAlign: 'center', marginTop: '0px' }}>
           <Spin size="large" />
         </div>
       )}
 
       <Modal
-        title="Selected Route and Vehicle Details"
+        // title="Selected Route and Vehicle Details"
         visible={isModalVisible}
         onCancel={handleModalClose}
         footer={null}
@@ -220,26 +237,29 @@ const RouteOptimization = () => {
           rowKey="key"
         />
 
-        {/* Leaflet Map */}
-        <div style={{ height: '500px', marginTop: '20px' }}> {/* Increased height for better visibility */}
+        {/* <div style={{ height: '300px', marginTop: '20px' }}>
           <MapContainer center={mapCenter} zoom={13} style={{ height: '100%', width: '100%' }}>
             <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             />
             {routeCoordinates.length > 0 && (
               <>
+                <Polyline positions={routeCoordinates.map(coord => [coord.lat, coord.lng])} color="blue" />
                 <Marker position={routeCoordinates[0]}>
-                  <Popup>Start: {selectedRoute?.startLocation?.description || "Start"}</Popup>
+                  <Popup>Start: {selectedRoute?.startLocation.name}</Popup>
                 </Marker>
                 <Marker position={routeCoordinates[1]}>
-                  <Popup>End: {selectedRoute?.endLocation?.description || "End"}</Popup>
+                  <Popup>End: {selectedRoute?.endLocation.name}</Popup>
                 </Marker>
-                <Polyline positions={routeCoordinates.map(coord => [coord.lat, coord.lng])} color="blue" weight={5} />
               </>
             )}
           </MapContainer>
-        </div>
+        </div> */}
+
+        <Button type="primary" onClick={handleConfirm} style={{ marginTop: '20px' }}>
+          Confirm
+        </Button>
       </Modal>
     </Card>
   );
